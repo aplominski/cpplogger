@@ -87,4 +87,40 @@ void cpplogger::error(std::string msg, int level) {
     this->log_file_stream.write(message.c_str(),strlen(message.c_str()));
 }
 
+extern "C" {
+
+cpplogger_handle* cpplogger_create(bool console_enabled, const char* log_file) {
+    cpplogger_handle* handle = new cpplogger_handle;
+    handle->ptr = new cpplogger(console_enabled, std::string(log_file));
+    return handle;
+}
+
+void cpplogger_destroy(cpplogger_handle* handle) {
+    if (handle) {
+        delete static_cast<cpplogger*>(handle->ptr);
+        delete handle;
+    }
+}
+
+void cpplogger_log(const char* msg, cpplogger_handle* handle) {
+    if (handle && handle->ptr) {
+        static_cast<cpplogger*>(handle->ptr)->log(std::string(msg));
+    }
+}
+void cpplogger_info(const char* msg, int level, cpplogger_handle* handle) {
+    if (handle && handle->ptr) {
+        static_cast<cpplogger*>(handle->ptr)->info(std::string(msg), level);
+    }
+}
+void cpplogger_warning(const char* msg, int level, cpplogger_handle* handle) {
+    if (handle && handle->ptr) {
+        static_cast<cpplogger*>(handle->ptr)->warning(std::string(msg), level);
+    }
+}
+void cpplogger_error(const char* msg, int level, cpplogger_handle* handle) {
+    if (handle && handle->ptr) {
+        static_cast<cpplogger*>(handle->ptr)->error(std::string(msg), level);
+    }
+}
+}
 
