@@ -87,6 +87,13 @@ void cpplogger::error(std::string msg, int level) {
     this->log_file_stream.write(message.c_str(),strlen(message.c_str()));
 }
 
+bool cpplogger::getCoutLogEnabled() const {
+    return this->console_enabled;
+}
+void cpplogger::setCoutLogEnabled(bool new_state) {
+    this->console_enabled = new_state;
+}
+
 extern "C" {
 
 cpplogger_handle* cpplogger_create(bool console_enabled, const char* log_file) {
@@ -122,5 +129,16 @@ void cpplogger_error(const char* msg, int level, cpplogger_handle* handle) {
         static_cast<cpplogger*>(handle->ptr)->error(std::string(msg), level);
     }
 }
+bool cpplogger_getCoutLogEnabled(cpplogger_handle* handle) {
+    if (handle && handle->ptr) {
+        return static_cast<cpplogger*>(handle->ptr)->getCoutLogEnabled();
+    }
+}
+void cpplogger_setCoutLogEnabled(cpplogger_handle* handle, bool new_state) {
+    if (handle && handle->ptr) {
+        static_cast<cpplogger*>(handle->ptr)->setCoutLogEnabled(new_state);
+    }
+}
+
 }
 

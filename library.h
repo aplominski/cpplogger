@@ -22,6 +22,8 @@ public:
     void warning(std::string msg, int level);
     void error(std::string msg, int level);
 
+    bool getCoutLogEnabled() const;
+    void setCoutLogEnabled(bool new_state);
 private:
     bool console_enabled;
     std::string log_file;
@@ -40,11 +42,13 @@ typedef struct {
 cpplogger_handle* cpplogger_create(bool console_enabled, const char* log_file);
 void cpplogger_destroy(cpplogger_handle* handle);
 
-void cpplogger_log(const char* msg, cpplogger_handle handle);
+void cpplogger_log(const char* msg, cpplogger_handle* handle);
 void cpplogger_info(const char* msg, int level, cpplogger_handle* handle);
 void cpplogger_warning(const char* msg, int level, cpplogger_handle* handle);
 void cpplogger_error(const char* msg, int level, cpplogger_handle* handle);
 
+bool cpplogger_getCoutLogEnabled(cpplogger_handle* handle);
+void cpplogger_setCoutLogEnabled(cpplogger_handle* handle, bool new_state);
 #ifdef __cplusplus
 }
 #endif
